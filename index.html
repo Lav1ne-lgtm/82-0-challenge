@@ -51,65 +51,57 @@
 </div>
 
 <script>
-// ==================== 大幅扩充后的球员数据库（增加大量85-92现役球员） ====================
+// ==================== 球员数据库 ====================
 const playersDB = {
     "PG": [
-        {name:"迈克尔·乔丹", team:"芝加哥公牛", era:"90s", rating:98},
-        {name:"魔术师约翰逊", team:"洛杉矶湖人", era:"80s", rating:97},
-        {name:"斯蒂芬·库里", team:"金州勇士", era:"2010s", rating:96},
-        {name:"卢卡·东契奇", team:"达拉斯独行侠", era:"2025-26", rating:97},
-        {name:"谢伊·吉尔杰斯-亚历山大", team:"俄克拉荷马雷霆", era:"2025-26", rating:97},
+        {name:"魔术师约翰逊", team:"洛杉矶湖人", era:"1980s", rating:97, historical: true},
+        {name:"斯蒂芬·库里", team:"金州勇士", era:"2010s", rating:96, historical: true},
+        {name:"卢卡·东契奇", team:"达拉斯独行侠", era:"2025-26", rating:94},
+        {name:"谢伊·吉尔杰斯-亚历山大", team:"俄克拉荷马雷霆", era:"2025-26", rating:95},
         {name:"凯德·坎宁安", team:"底特律活塞", era:"2025-26", rating:94},
-        {name:"泰雷斯·马克西", team:"费城76人", era:"2025-26", rating:92},
-        // 新增中低分现役PG
-        {name:"特雷·杨", team:"亚特兰大老鹰", era:"2024-25", rating:91},
+        {name:"特雷·杨", team:"华盛顿奇才", era:"2025-26", rating:91},
         {name:"贾·莫兰特", team:"孟菲斯灰熊", era:"2025-26", rating:90},
-        {name:"德隆·福克斯", team:"萨克拉门托国王", era:"2023-24", rating:89},
-        {name:"斯科蒂·巴恩斯", team:"多伦多猛龙", era:"2025-26", rating:88},
-        {name:"萨格斯", team:"奥兰多魔术", era:"2025-26", rating:87}
+        {name:"达隆·福克斯", team:"圣安东尼奥马刺", era:"2025-26", rating:89}
     ],
     "SG": [
-        {name:"科比·布莱恩特", team:"洛杉矶湖人", era:"2000s", rating:97},
-        {name:"德文·布克", team:"菲尼克斯太阳", era:"2020s", rating:94},
+        {name:"迈克尔·乔丹", team:"芝加哥公牛", era:"1990s", rating:98, historical: true},
+        {name:"科比·布莱恩特", team:"洛杉矶湖人", era:"2000s", rating:97, historical: true},
+        {name:"杰伦·布朗", team:"波士顿凯尔特人", era:"2025-26", rating:96},
         {name:"安东尼·爱德华兹", team:"明尼苏达森林狼", era:"2025-26", rating:95},
-        {name:"阿门·汤普森", team:"休斯顿火箭", era:"2025-26", rating:91},
-        {name:"德斯蒙德·贝恩", team:"奥兰多魔术", era:"2025-26", rating:90},
-        // 新增中低分现役SG
-        {name:"杰伦·格林", team:"休斯顿火箭", era:"2024-25", rating:89},
-        {name:"迈克尔·波特", team:"丹佛掘金", era:"2024-25", rating:88},
-        {name:"加里·特伦特", team:"密尔沃基雄鹿", era:"2025-26", rating:86},
-        {name:"乔丹·普尔", team:"华盛顿奇才", era:"2024-25", rating:85}
+        {name:"多诺万·米切尔", team:"克利夫兰骑士", era:"2025-26", rating:94},
+        {name:"德文·布克", team:"菲尼克斯太阳", era:"2025-26", rating:93},
+        {name:"杰伦·格林", team:"菲尼克斯太阳", era:"2025-26", rating:89},
+        {name:"乔丹·普尔", team:"奥尔良鹈鹕", era:"2025-26", rating:85}
     ],
     "SF": [
-        {name:"勒布朗·詹姆斯", team:"洛杉矶湖人", era:"2020s", rating:96},
-        {name:"凯文·杜兰特", team:"休斯顿火箭", era:"2025-26", rating:96},
-        {name:"杰森·塔图姆", team:"波士顿凯尔特人", era:"2020s", rating:94},
-        {name:"保罗·乔治", team:"费城76人", era:"2025-26", rating:91},
-        // 新增中低分现役SF
-        {name:"迈卡尔·布里奇斯", team:"纽约尼克斯", era:"2025-26", rating:89},
-        {name:"OG·阿努诺比", team:"纽约尼克斯", era:"2025-26", rating:88},
-        {name:"米卡尔·布里奇斯", team:"纽约尼克斯", era:"2025-26", rating:87}
+        {name:"勒布朗·詹姆斯", team:"克利夫兰骑士", era:"2010s", rating:97, historical: true},
+        {name:"凯文·杜兰特", team:"金州勇士", era:"2010s", rating:96, historical: true},
+        {name:"杰森·塔图姆", team:"波士顿凯尔特人", era:"2020s", rating:94, historical: true},
+        {name:"科怀·伦纳德", team:"；洛杉矶快船", era:"2025-26", rating:92},
+        {name:"杰伦·约翰逊", team:"亚特兰大老鹰", era:"2025-26", rating:90},
+        {name:"迈卡尔·布里奇斯", team:"纽约尼克斯", era:"2025-26", rating:88}
+        {name:"保罗·乔治", team:"费城76人", era:"2025-26", rating:87},
+        {name:"保罗·班切罗", team:"奥兰多魔术", era:"2025-26", rating:85}
     ],
     "PF": [
-        {name:"扬尼斯·安特托孔波", team:"密尔沃基雄鹿", era:"2020s", rating:97},
-        {name:"尼古拉·约基奇", team:"丹佛掘金", era:"2025-26", rating:97},
-        {name:"蒂姆·邓肯", team:"圣安东尼奥马刺", era:"2000s", rating:96},
-        {name:"贾巴里·史密斯", team:"休斯顿火箭", era:"2025-26", rating:90},
-        // 新增中低分现役PF
-        {name:"斯科蒂·巴恩斯", team:"多伦多猛龙", era:"2025-26", rating:89},
+        {name:"扬尼斯·安特托孔波", team:"密尔沃基雄鹿", era:"2020s", rating:96, historical: true},
+        {name:"蒂姆·邓肯", team:"圣安东尼奥马刺", era:"2000s", rating:97, historical: true},
+        {name:"尼古拉·约基奇", team:"丹佛掘金", era:"2025-26", rating:95},
+        {name:"斯科蒂·巴恩斯", team:"多伦多猛龙", era:"2025-26", rating:92},
+        {name:"阿尔佩伦·申京", team:"休斯顿火箭", era:"2025-26", rating:91},
+        {name:"霍姆格伦·切特", team:"俄克拉荷马雷霆", era:"2025-26", rating:89},
         {name:"帕斯卡尔·西亚卡姆", team:"印第安纳步行者", era:"2025-26", rating:88},
-        {name:"朱利叶斯·兰德尔", team:"明尼苏达森林狼", era:"2025-26", rating:87}
+        {name:"弗朗茨·瓦格纳", team:"奥兰多魔术", era:"2025-26", rating:85}
     ],
     "C": [
-        {name:"沙奎尔·奥尼尔", team:"洛杉矶湖人", era:"2000s", rating:98},
-        {name:"威尔特·张伯伦", team:"费城76人", era:"60s", rating:99},
+        {name:"沙奎尔·奥尼尔", team:"洛杉矶湖人", era:"2000s", rating:98, historical: true},
+        {name:"威尔特·张伯伦", team:"费城76人", era:"1960s", rating:99, historical: true},
         {name:"维克托·文班亚马", team:"圣安东尼奥马刺", era:"2025-26", rating:96},
-        {name:"乔尔·恩比德", team:"费城76人", era:"2020s", rating:95},
-        {name:"安东尼·戴维斯", team:"洛杉矶湖人", era:"2020s", rating:93},
-        // 新增中低分现役C
-        {name:"卡尔-安东尼·唐斯", team:"纽约尼克斯", era:"2025-26", rating:91},
+        {name:"乔尔·恩比德", team:"费城76人", era:"2025-26", rating:93},
+        {name:"安东尼·戴维斯", team:"华盛顿奇才", era:"2025-26s", rating:92},
+        {name:"卡尔-安东尼·唐斯", team:"纽约尼克斯", era:"2025-26", rating:94},
         {name:"德安德烈·艾顿", team:"洛杉矶湖人", era:"2025-26", rating:88},
-        {name:"贾勒特·阿伦", team:"克利夫兰骑士", era:"2025-26", rating:86}  // 部分可打C
+        {name:"伊维察·祖巴茨", team:"印第安步行者", era:"2025-26", rating:85}
     ]
 };
 
@@ -140,8 +132,15 @@ function nextRound() {
     poolDiv.innerHTML = '';
     
     let pool = [...playersDB[pos]];
-    pool.sort(() => Math.random() - 0.5);
-    pool = pool.slice(0, 3);   // 每轮仍只显示3人
+    
+    // 加权随机：现役球员概率更高
+    pool.sort(() => {
+        const aHist = a.historical ? 0.2 : 1;
+        const bHist = b.historical ? 0.2 : 1;
+        return (Math.random() * bHist) - (Math.random() * aHist);
+    });
+    
+    pool = pool.slice(0, 3);
     
     pool.forEach(player => {
         const card = document.createElement('div');
@@ -167,9 +166,9 @@ function selectPlayer(player, card, pos) {
 
 function calculateChemistry() {
     let chemistry = 0;
-    if (selectedPlayers.some(p => (p.posKey === "PG" || p.posKey === "SG") && p.rating >= 95)) chemistry += 5;
-    if (selectedPlayers.some(p => (p.posKey === "PF" || p.posKey === "C") && p.rating >= 95)) chemistry += 5;
-    if (selectedPlayers.some(p => p.rating >= 96)) chemistry += 6;
+    if (selectedPlayers.some(p => (p.posKey === "PG" || p.posKey === "SG") && p.rating >= 95)) chemistry += 3;
+    if (selectedPlayers.some(p => (p.posKey === "PF" || p.posKey === "C") && p.rating >= 95)) chemistry += 3;
+    if (selectedPlayers.some(p => p.rating >= 96)) chemistry += 4;
     return chemistry;
 }
 
@@ -185,14 +184,16 @@ function showResult() {
     
     const avgRating = selectedPlayers.reduce((sum, p) => sum + p.rating, 0) / 5;
     const chemistry = calculateChemistry();
-    const randomness = Math.random() * 14 - 7;
-    let wins = Math.floor(avgRating * 0.78 + chemistry + randomness);
-    wins = Math.max(55, Math.min(82, wins));
+    const randomness = Math.random() * 12 - 8;   // 更偏向负面
+    
+    let wins = Math.floor(avgRating * 0.68 + chemistry + randomness);
+    wins = Math.max(52, Math.min(82, wins));
+    
     const losses = 82 - wins;
     
-    const comment = wins >= 80 ? "🏆 历史级完美阵容！" : 
-                    wins >= 76 ? "🔥 极强冠军阵容！" : 
-                    wins >= 71 ? "👍 出色赛季" : "阵容一般，继续努力！";
+    const comment = wins >= 78 ? "🏆 接近完美！极罕见" : 
+                    wins >= 74 ? "🔥 顶级强队表现" : 
+                    wins >= 68 ? "👍 还算不错" : "阵容较弱，继续加油！";
     
     document.getElementById('result').innerHTML = `
         模拟战绩：<br>
@@ -209,7 +210,7 @@ function restartGame() {
 }
 
 function showRules() {
-    alert("🎯 规则：\n1. 共5轮，每轮随机显示3名球员\n2. 每位置选1人\n3. 能力值越高、球星越多越容易高胜率\n现在增加了很多普通现役球员，更具挑战！");
+    alert("🎯 规则：\n1. 历史传奇球员出现概率大幅降低\n2. 每轮只显示3名球员\n3. 现役球员为主，更具挑战性\n4. 高胜率需要极强阵容搭配！");
 }
 </script>
 </body>
