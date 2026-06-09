@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>82-0 完美赛季大挑战</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body { font-family: "Microsoft YaHei", sans-serif; background: linear-gradient(#1a0033, #000); color: #fff; margin:0; padding:0; text-align:center; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 3.5em; margin: 20px 0; text-shadow: 0 0 20px gold; }
+    .subtitle { font-size: 1.4em; margin-bottom: 30px; }
+    button { 
+        background: linear-gradient(#ff9800, #f57c00); color: white; border: none; 
+        padding: 15px 40px; font-size: 1.3em; margin: 15px; border-radius: 50px; cursor: pointer;
+    }
+    button:hover { transform: scale(1.05); }
+    .player-pool { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 30px 0; }
+    .player-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; }
+    .player-card:hover { background: rgba(255,215,0,0.3); transform: scale(1.05); }
+    .selected { border: 3px solid gold; background: rgba(255,215,0,0.2); }
+    .lineup { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin: 40px 0; }
+    .player-slot { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; min-width: 160px; }
+    .result { font-size: 2.8em; margin: 30px 0; color: gold; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>82 <span style="color:#ffd700;">胜</span> 0</h1>
+    <p class="subtitle">完美赛季大挑战</p>
+    <p>随机球队 · 随机年代 · 五次机会<br>谁能打造出最强82-0阵容？</p>
+
+    <button onclick="startGame()">🎮 开始游戏</button>
+    <button onclick="showRules()">📜 玩法说明</button>
+
+    <div id="game" style="display:none;">
+        <h2 id="roundTitle">第 <span id="round">1</span>/5 轮 - <span id="position">控球后卫</span></h2>
+        <div id="teamInfo" style="margin:15px; font-size:1.2em; color:#ffd700;"></div>
+        
+        <div class="player-pool" id="pool"></div>
+        
+        <div style="margin-top:30px;">
+            <button onclick="nextRound()" id="nextBtn" style="display:none;">✅ 确认选择 → 下一轮</button>
+        </div>
+
+        <div id="lineupSection" style="display:none; margin-top:40px;">
+            <h2>你的最终阵容</h2>
+            <div class="lineup" id="lineup"></div>
+            <div class="result" id="result"></div>
+            <button onclick="restartGame()">🔄 再来一次</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==================== 扩充后的球员数据库 ====================
+const playersDB = {
+    "PG": [
+        {name:"迈克尔·乔丹", team:"芝加哥公牛", era:"90s", rating:98},
+        {name:"魔术师约翰逊", team:"洛杉矶湖人", era:"80s", rating:97},
+        {name:"斯蒂芬·库里", team:"金州勇士", era:"2010s", rating:96},
+        {name:"卢卡·东契奇", team:"达拉斯独行侠", era:"2020s", rating:96},
+        {name:"奥斯卡·罗伯特森", team:"辛辛那提皇家", era:"60s", rating:95},
+        {name:"克里斯·保罗", team:"洛杉矶快船", era:"2010s", rating:93},
+        {name:"达米安·利拉德", team:"密尔沃基雄鹿", era:"2020s", rating:92}
+    ],
+    "SG": [
+        {name:"科比·布莱恩特", team:"洛杉矶湖人", era:"2000s", rating:97},
+        {name:"德文·布克", team:"菲尼克斯太阳", era:"2020s", rating:94},
+        {name:"克莱·汤普森", team:"金州勇士", era:"2010s", rating:92},
+        {name:"雷·阿伦", team:"波士顿凯尔特人", era:"2000s", rating:91},
+        {name:"雷吉·米勒", team:"印第安纳步行者", era:"90s", rating:90}
+    ],
+    "SF": [
+        {name:"勒布朗·詹姆斯", team:"洛杉矶湖人", era:"2010s-2020s", rating:99},
+        {name:"凯文·杜兰特", team:"菲尼克斯太阳", era:"2020s", rating:97},
+        {name:"拉里·伯德", team:"波士顿凯尔特人", era:"80s", rating:96},
+        {name:"杰森·塔图姆", team:"波士顿凯尔特人", era:"2020s", rating:94},
+        {name:"保罗·乔治", team:"费城76人", era:"2020s", rating:91}
+    ],
+    "PF": [
+        {name:"蒂姆·邓肯", team:"圣安东尼奥马刺", era:"2000s", rating:96},
+        {name:"扬尼斯·安特托孔波", team:"密尔沃基雄鹿", era:"2020s", rating:97},
+        {name:"卡尔·马龙", team:"犹他爵士", era:"90s", rating:94},
+        {name:"尼古拉·约基奇", team:"丹佛掘金", era:"2020s", rating:96},
+        {name:"凯文·加内特", team:"明尼苏达森林狼", era:"2000s", rating:95}
+    ],
+    "C": [
+        {name:"沙奎尔·奥尼尔", team:"洛杉矶湖人", era:"2000s", rating:98},
+        {name:"威尔特·张伯伦", team:"费城76人", era:"60s", rating:99},
+        {name:"卡里姆·阿布杜尔-贾巴尔", team:"洛杉矶湖人", era:"70s", rating:97},
+        {name:"乔尔·恩比德", team:"费城76人", era:"2020s", rating:95},
+        {name:"尼古拉·约基奇", team:"丹佛掘金", era:"2020s", rating:96},
+        {name:"安东尼·戴维斯", team:"洛杉矶湖人", era:"2020s", rating:93}
+    ]
+};
+
+let currentRound = 0;
+let selectedPlayers = [];
+const positions = ["PG", "SG", "SF", "PF", "C"];
+const posNames = {PG:"控球后卫", SG:"得分后卫", SF:"小前锋", PF:"大前锋", C:"中锋"};
+
+function startGame() {
+    document.getElementById('game').style.display = 'block';
+    currentRound = 0;
+    selectedPlayers = [];
+    nextRound();
+}
+
+function nextRound() {
+    currentRound++;
+    if (currentRound > 5) {
+        showResult();
+        return;
+    }
+    
+    document.getElementById('round').textContent = currentRound;
+    document.getElementById('position').textContent = posNames[positions[currentRound-1]];
+    
+    const pos = positions[currentRound-1];
+    const poolDiv = document.getElementById('pool');
+    poolDiv.innerHTML = '';
+    
+    const sample = playersDB[pos][Math.floor(Math.random() * playersDB[pos].length)];
+    document.getElementById('teamInfo').innerHTML = `当前可选：${sample.team} ${sample.era} 球员池`;
+    
+    playersDB[pos].forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        card.innerHTML = `
+            <strong>${player.name}</strong><br>
+            ${player.team} ${player.era}<br>
+            <small>能力值：${player.rating}</small>
+        `;
+        card.onclick = () => selectPlayer(player, card, pos);
+        poolDiv.appendChild(card);
+    });
+    
+    document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectPlayer(player, card, pos) {
+    selectedPlayers.push({
+        ...player, 
+        position: posNames[pos],
+        posKey: pos
+    });
+    
+    document.querySelectorAll('.player-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function calculateChemistry() {
+    let chemistry = 0;
+    // 简单相性加成（后卫、前锋、中锋搭配）
+    const hasEliteGuard = selectedPlayers.some(p => (p.posKey === "PG" || p.posKey === "SG") && p.rating >= 95);
+    const hasEliteBig = selectedPlayers.some(p => (p.posKey === "PF" || p.posKey === "C") && p.rating >= 95);
+    const hasStar = selectedPlayers.some(p => p.rating >= 97);
+    
+    if (hasEliteGuard) chemistry += 4;
+    if (hasEliteBig) chemistry += 4;
+    if (hasStar) chemistry += 5;
+    
+    return chemistry;
+}
+
+function showResult() {
+    const lineupDiv = document.getElementById('lineup');
+    lineupDiv.innerHTML = '';
+    
+    selectedPlayers.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'player-slot';
+        div.innerHTML = `<strong>${p.position}</strong><br>${p.name}<br><small>${p.team} • ${p.rating}</small>`;
+        lineupDiv.appendChild(div);
+    });
+    
+    // 计算最终战绩
+    const avgRating = selectedPlayers.reduce((sum, p) => sum + p.rating, 0) / 5;
+    const chemistry = calculateChemistry();
+    const randomness = Math.random() * 12 - 6; // -6 到 +6 波动
+    
+    let wins = Math.floor(avgRating * 0.75 + chemistry + randomness);
+    wins = Math.max(55, Math.min(82, wins)); // 限制范围
+    
+    const losses = 82 - wins;
+    
+    let comment = "";
+    if (wins >= 80) comment = "🏆 接近完美！历史级阵容！";
+    else if (wins >= 75) comment = "🔥 非常出色！季后赛冠军级别";
+    else if (wins >= 70) comment = "👍 强队表现";
+    else comment = "继续努力，下次会更好！";
+    
+    document.getElementById('result').innerHTML = `
+        模拟战绩：<br>
+        <span style="font-size:2.8em;">${wins} - ${losses}</span><br>
+        <span style="font-size:1.1em;">${comment}</span>
+    `;
+    
+    document.getElementById('lineupSection').style.display = 'block';
+}
+
+function restartGame() {
+    document.getElementById('lineupSection').style.display = 'none';
+    document.getElementById('game').style.display = 'none';
+    startGame(); // 自动开始新的一局
+}
+
+function showRules() {
+    alert("🎯 规则说明：\n\n" +
+          "1. 共5轮，每轮从随机球队+年代的球员池中选择1人\n" +
+          "2. 最终战绩由球员能力值 + 阵容相性 + 少量随机因素决定\n" +
+          "3. 能力值越高、球星越多、攻防搭配越合理，胜率越高\n" +
+          "4. 最高可达82-0，但需要极强阵容！");
+}
+</script>
+</body>
+</html>
