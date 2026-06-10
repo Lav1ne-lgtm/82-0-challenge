@@ -197,4 +197,30 @@ function showResult() {
     const chemistry = calculateChemistry();
     const randomness = Math.random() * 12 - 8;
     let wins = Math.floor(avgRating * 0.68 + chemistry + randomness);
-    wins = Math.max(52, Math.min(82, wins
+    wins = Math.max(52, Math.min(82, wins));
+    const losses = 82 - wins;
+    
+    const comment = wins >= 78 ? "🏆 接近完美！极罕见" :
+                    wins >= 74 ? "🔥 顶级强队表现" :
+                    wins >= 68 ? "👍 还算不错" : "阵容较弱，继续加油！";
+    
+    document.getElementById('result').innerHTML = `
+        模拟战绩：<br>
+        <span style="font-size:2.8em;">${wins} - ${losses}</span><br>
+        <span style="font-size:1.2em;">${comment}</span>
+    `;
+    document.getElementById('lineupSection').style.display = 'block';
+}
+
+function restartGame() {
+    document.getElementById('lineupSection').style.display = 'none';
+    document.getElementById('game').style.display = 'none';
+    startGame();
+}
+
+function showRules() {
+    alert("🎯 规则：\n1. 共5轮，每轮选1人\n2. 第5轮选择后自动显示最终阵容");
+}
+</script>
+</body>
+</html>
