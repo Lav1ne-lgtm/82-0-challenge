@@ -51,7 +51,7 @@
 </div>
 
 <script>
-// ==================== 球员数据库（保持你原来的数据） ====================
+// ==================== 球员数据库 ====================
 const playersDB = {
     "PG": [
         {name:"魔术师约翰逊", team:"洛杉矶湖人", era:"1980s", rating:97, historical: true},
@@ -157,15 +157,17 @@ function nextRound() {
 }
 
 function selectPlayer(player, card, pos) {
+    // 关键修复：防止重复添加
+    if (selectedPlayers.length >= 5) return;
+    
     selectedPlayers.push({ ...player, position: posNames[pos], posKey: pos });
     
-    // 高亮选中
     document.querySelectorAll('.player-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     
-    // 第5轮选择后自动进入结果
+    // 第5轮选择后自动显示结果
     if (currentRound === 5) {
-        setTimeout(showResult, 300);   // 稍作延迟，增加流畅感
+        setTimeout(showResult, 400);
     } else {
         document.getElementById('nextBtn').style.display = 'inline-block';
     }
@@ -183,7 +185,8 @@ function showResult() {
     const lineupDiv = document.getElementById('lineup');
     lineupDiv.innerHTML = '';
     
-    selectedPlayers.forEach(p => {
+    // 只显示前5个（保险措施）
+    selectedPlayers.slice(0, 5).forEach(p => {
         const div = document.createElement('div');
         div.className = 'player-slot';
         div.innerHTML = `<strong>${p.position}</strong><br>${p.name}<br><small>${p.team} • ${p.rating}</small>`;
@@ -194,30 +197,4 @@ function showResult() {
     const chemistry = calculateChemistry();
     const randomness = Math.random() * 12 - 8;
     let wins = Math.floor(avgRating * 0.68 + chemistry + randomness);
-    wins = Math.max(52, Math.min(82, wins));
-    const losses = 82 - wins;
-    
-    const comment = wins >= 78 ? "🏆 接近完美！极罕见" :
-                    wins >= 74 ? "🔥 顶级强队表现" :
-                    wins >= 68 ? "👍 还算不错" : "阵容较弱，继续加油！";
-    
-    document.getElementById('result').innerHTML = `
-        模拟战绩：<br>
-        <span style="font-size:2.8em;">${wins} - ${losses}</span><br>
-        <span style="font-size:1.2em;">${comment}</span>
-    `;
-    document.getElementById('lineupSection').style.display = 'block';
-}
-
-function restartGame() {
-    document.getElementById('lineupSection').style.display = 'none';
-    document.getElementById('game').style.display = 'none';
-    startGame();
-}
-
-function showRules() {
-    alert("🎯 规则：\n1. 共5轮，每轮选1人\n2. 第5轮选择后自动显示最终结果");
-}
-</script>
-</body>
-</html>
+    wins = Math.max(52, Math.min(82, wins
